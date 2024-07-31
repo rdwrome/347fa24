@@ -1,0 +1,2 @@
+ControlSpec(100,1000,\exp,5).map(0.5); // map a 0-1 linear input range to a 100,1000 output one with exponential interpolation and at intervals of 5 
+ControlSpec(100,1000,\exp,5).unmap(315);  // map a 100-1000 exponential input range to a 0,1 output one with linear interpolation and at intervals of 5 

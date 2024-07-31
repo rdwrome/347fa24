@@ -1,0 +1,1 @@
+NeuralNet.pathToNeuralNetBinary_("/Users/marinos/Library/Application Support/SuperCollider/Extensions/SCMIRExtensions/scmirexec/NeuralNet") // set the path of the NeuralNet unix executable

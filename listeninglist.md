@@ -29,7 +29,3 @@ https://pulu.bandcamp.com/album/happy-jams
 
 https://nathanho.bandcamp.com/album/haywire-frontier
 */
-
-https://www.youtube.com/watch?v=jTJXrJWtUBg
-
-https://www.youtube.com/watch?v=erD5ScpJhK0 - Violin Jam

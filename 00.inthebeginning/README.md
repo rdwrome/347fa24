@@ -1,12 +1,34 @@
 # in the beginning
 
+- Big Picture
 - Introductions
 - GitHub vs Canvas
   - everyone in the GitHub
-- Install [SuperCollider](https://supercollider.github.io/)
+
+## Syllabus
+
+## Listening List
+
+## Install [SuperCollider](https://supercollider.github.io/)
   - 343/tidal cycles fyi
-- Syllabus
-- Listening List
+
+## Object - Oriented, based on smalltalk (old general use language)
+- **Encapsulation**
+- object: independent part of the program that manages itself (own rules and ways of doing things); a representation of something that you can control and send messages to
+- **Inheritance**
+- objects get their functions from classes
+- class: template, blueprint for creating objects
+- superclass is parent, class is child
+- class inherits attributes of parent (through abstraction) but modifies, evolves
+- classes are reusable
+- **Polymorphism**
+- change the way something works by overriding and overloading
+- change type, have multiple types work together
+- overriding: walk backwards
+- overloading: walk to run 
+
+## [Open Sound Control](https://ccrma.stanford.edu/groups/osc/index.html)
+- Client and Server communicate in OSC messages
 
 ## Getting Started with SuperCollider
 - What you downloaded was actually three things:
@@ -25,23 +47,5 @@
 - Everything's in mono by default
 - "Syntax Sugar": many ways to write out the same thing
 - Help! with **Command|D**
-
-### Object - Oriented, based on smalltalk (old general use language)
-**Encapsulation**
-object: independent part of the program that manages itself (own rules and ways of doing things); a representation of something that you can control and send messages to
-**Inheritance**
-objects get their functions from classes
-class: template, blueprint for creating objects
-superclass is parent, class is child
-class inherits attributes of parent (through abstraction) but modifies, evolves
-classes are reusable
-**Polymorphism**
-change the way something works by overriding and overloading
-change type, have multiple types work together
-overriding: walk to moon walk
-overloading: walk to
-
-## [Open Sound Control](https://ccrma.stanford.edu/groups/osc/index.html)
-- Client and Server communicate in OSC messages
 
 ## CODEALONG.scd in this folder

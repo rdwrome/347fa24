@@ -5,7 +5,7 @@
 // this is a comment! it is valid code but doesn't do anything
 
 /*this is a...
-multi-line commen
+multi-line comment
 REMINDERS FROM this week's README.md
 - Client (Interpreter/Language) boots when you open IDE
 - You do need to boot the Audio Server with <<Command|B>> BUT WE WILL NOT DO THIS QUITE YET
@@ -79,7 +79,7 @@ a.value; // .value evaluates the function stored in "a"
 // .postln, .value (evaluate) are messages to function objects included in sclang
 
 
-
+// RACHEL WE ENDED HERE SEPT 5
 
 
 //////// 6 ////////

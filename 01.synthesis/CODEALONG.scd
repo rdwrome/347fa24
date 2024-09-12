@@ -1,65 +1,72 @@
 // adapted from https://github.com/schollz/workshops and https://en.wikibooks.org/wiki/Designing_Sound_in_SuperCollider
 
-/* RACHEL REMINDERS
+/*
+Preludes
+
+*busses*
+- your analog meaning of busses mostly make sense here
+- bus methods are kind of confusing in sc sometimes because there are sometimes private busses that work more like effects sends and aren't explicitly declared.
+- a good explanation of this can be found here:
+https://doc.sccode.org/Tutorials/Getting-Started/11-Busses.html
+but I'll explain more in the 03.patterns week.
+
+*digital audio 101*
+- transducers
+- A/D, D/A
+- amplitude
+- nyquist
+- sample rates
+- bit resolution/bit depth
+
+*rachel reminders*
 - Client (Interpreter/Language) boots when you open IDE
 - You do need to actively boot the Audio Server with <<Command|B>>
+- (see sample rate there!)
 - You see your I/O in the Post window after booting the Audio Server
+- If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup, *then* boot
 - [You might need to change them/select them with this code](https://doc.sccode.org/Reference/AudioDeviceSelection.html)
-- If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup
 - Evaluate a block with <<Command|Return>> when your cursor is *in* the block
-- Kill what is on the server with <<Command|.>>
-- ***Beware Zombie servers***
-- Everything's in mono by default
-- "Syntax Sugar": many ways to write out the same thing
 - Help! with <<Command|D>>
 
-*brief interlude on busses*
-your analog meaning of busses mostly make sense here
-bus methods are kind of confusing in sc sometimes because there are sometimes private busses that work more like effects sends and aren't explicitly declared.
-a good explanation of this can be found here:
-https://doc.sccode.org/Tutorials/Getting-Started/11-Busses.html
-but I'll explain more in the 03.patterns week
 */
 
 
-//////// 10  ////////
-// save a variable and a Sine UGen to the "x" variable
 (
 x={
-	// arg freq=220; /* PIRATE vs PIPE NOTATION a la rachelle */
+	//arg freq=220; /* PIRATE vs PIPE NOTATION a la rachelle */
 	| freq=220 |
 	SinOsc.ar(freq:freq);
 }.play; // .play will play it
 )
 
 // now you can run each of these lines to change it!
-x.set(\freq,440);
+x.set(\freq,220);
 
-x.set(\freq,72.midicps); // .midicps converts midi note to frequency (cycles per second)
+x.set(\freq,44.midicps); // .midicps converts midi note to frequency (cycles per second)
 
 x.free; // we can stop the synth running this line
 
-/*interludes
+/*
+Interludes
 
-Stopping sounds with sophistication
+*Stopping sounds with sophistication*
 .free - kills bus assigned to variable on the server (ideal)
 <<Command|.>> - kills all busses on the server (panic)
 Server>Kill All Servers > KILLS ALL SERVERS (apocalypse)
 
-UGens
-- Many classes of them (inheritance...you down with OOP?)
+*UGens*
 - Modular building blocks of synthesis systems
 - Think of them like modules in your synthesizer
   - They make a waveform, a filter, etc.
 - In SC they're actually written in C/C++ and are a plugin to the SC Server, but most come standard with download
   - Most UGen classes have Audio Rate **.ar** and Control Rate **.kr** signal methods internal to the language.
-- LOOK UP THE PARAMETERS OF UGens with <<Command|D>>
+- LOOK UP THE arguments OF UGens with <<Command|D>>
 - AR = sends 44.1k values per second; KR = sends 7,350 values per second (1/6th as many as ar. Just saves CPU this way!...like difference between VCO and LFO modules in a modular synth).
 - Let's get out of mono with Pan2:*/
 {Pan2.ar(SinOsc.ar(440))}.play;
-{Pan2.ar(SinOsc.ar(440), SinOsc.kr(4), SinOsc.kr(4))}.play
+{Pan2.ar(SinOsc.ar(440), SinOsc.kr(4), SinOsc.kr(440))}.play // demo of .ar vs kr
 
-s.scope;
+s.scope; // time domain
 
 // Additive synthesis
 
@@ -71,7 +78,7 @@ x = {
 	var index = MouseY.kr(0.42, 0.99);
 	var theta, beta, num, denom, son;
 
-	// Two phasors which will ramp from zero to 2pi
+	// Two phasors which will ramp from zero to 2pi as fancy oscillators
 	theta = Phasor.ar(0, freq, 0, 2pi);
 	beta  = Phasor.ar(0, freq * distance, 0, 2pi);
 
@@ -80,9 +87,9 @@ x = {
 
 	son = num / denom;
 
-	Out.ar(0, Pan2.ar(son * 0.3));
+	Out.ar(0, Pan2.ar(son * 0.3)); // main mix or 'master' bus
 
-}.freqscope;
+}.freqscope; // frequency domain
 )
 
 // Frequency Modulation Synthesis
@@ -111,7 +118,7 @@ g.set(\carrierFreq, 955, \carrierLvl, 0.4, \modulatorRatio, 3, \modulatorIndex, 
 // To stop:
 g.free;
 /*
-rachel's recommended UGens for output
+rachel's recommended UGens for output, read help files for all!
 Pan2
 Out
 Mix
@@ -119,5 +126,3 @@ Splay
 Pan4
 PanAz
 */
-
-// SMALL ASSIGNMENT 1 for next week

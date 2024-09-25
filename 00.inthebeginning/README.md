@@ -43,6 +43,7 @@
 - [You might need to change them/select them with this code](https://doc.sccode.org/Reference/AudioDeviceSelection.html)
 - If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup
 - Evaluate a line with **Shift|Return**
+- Evaluate a block with **Command|Return**
 - Kill what is on the server with **Command|.**
 - ***Beware Zombie servers***
 - Everything's in mono by default

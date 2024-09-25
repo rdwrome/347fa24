@@ -7,39 +7,28 @@
 /*this is a...
 multi-line comment
 REMINDERS FROM this week's README.md
-- Client (Interpreter/Language) boots when you open IDE
-- You do need to boot the Audio Server with <<Command|B>> BUT WE WILL NOT DO THIS QUITE YET
+- You do need to boot the Audio Server with **Command|B**
 - You see your I/O in the Post window after booting the Audio Server
 - [You might need to change them/select them with this code](https://doc.sccode.org/Reference/AudioDeviceSelection.html)
 - If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup
-- Kill what is on the server with <<Command|.>>
+- Evaluate a line with **Shift|Return**
+- Evaluate a block with **Command|Return**
+- Kill what is on the server with **Command|.**
 - ***Beware Zombie servers***
 - Everything's in mono by default
 - "Syntax Sugar": many ways to write out the same thing
-- Help! with <<Command|D>>*/
+- Help! with **Command|D**
+*/
 
 
 //////// 2 ////////
-// now, this is a line of code that does something!
-// this line prints something in the window over there ->
-// run any line of code by putting your cursor on it and then
-// press <<Shift>+<Return>>
-
 "I love SuperCollider".postln;// <- make sure to always have a ";" after code
 
-
-
 //////// 3 ////////
-// parentheses make it easy to
-// run multiple lines of code with <<command>>+<<return>>
-
 (
 "I love SuperCollider".postln;
 "SuperCollider loves me".postln;
-)
-
-
-
+)//parentheses are everything
 
 //////// 4 ////////
 // disorder of operations!
@@ -50,8 +39,6 @@ REMINDERS FROM this week's README.md
 (100+2/2).postln; // what does this equal?
 (100+(2/2)).postln; // force order of operations using parentheses
 )
-
-
 
 
 //////// 5 ////////
@@ -77,13 +64,9 @@ a.value; // .value evaluates the function stored in "a"
 
 // .postln, .value (evaluate) are messages to function objects included in sclang
 
-
-// RACHEL WE ENDED HERE SEPT 5
-
-
 //////// 6 ////////
 // functions can have arguments and variables!
-// arguments and variables are similar, except that arguments can be passed into functions when the function is called.
+// arguments and variables are similar, except that arguments can be passed into functions when the function is called on the server.
 // step 1: create a function that contains arguments and variables
 (
 a={
@@ -139,9 +122,6 @@ interlude on the server
  s.serverRunning // is it running?
  s.avgCPU // how much CPU is it using right now?
 
-
-//!!! RACHEL REFRESHER ON SAMPLE RATE & BIT DEPTH !!!
-
 //////// 7 ////////
 // let's get into the music now!
 // we need to boot the server to start music making:
@@ -158,8 +138,6 @@ interlude on the server
 	SinOsc.ar(freq:220);
 }.plot(10/220); // .plot(x) will plot it for x seconds
 )
-
-
 
 
 //////// 9 ////////

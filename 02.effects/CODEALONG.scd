@@ -1,30 +1,7 @@
 // adapted from https://github.com/schollz/workshops
 
-/*
-rachel's recommended UGens for output
-Pan2
-Out
-Mix
-Splay
-Pan4
-PanAz
-*/
-(
-x={
-	arg freq=220, amp=0.5;
-	var snd;
-	snd=SinOsc.ar(freq:[freq,freq*2,freq*4],mul:[amp,amp/2,amp/8]);
-	snd=Mix.ar(snd); // mixes the three channels into 1
-	snd=Splay.ar(snd);
-	Out.ar(0,snd);
-}.play;
-)
-
-// free it when done or press <Ctrl>+.
-x.free;
-
-/*interlude on SynthDef
-- a class which pre-compiles multiple unit generators together on to the audio server
+/*SynthDefs
+- a class which pre-compiles multiple unit generators together on the server
 - greaaat for reuse!
 */
 
@@ -56,11 +33,7 @@ x.set(\freq,58.midicps);
 y.set(\freq,62.midicps);
 z.set(\freq,67.midicps);
 )
-(
-x.set(\freq,58.midicps);
-y.set(\freq,62.midicps);
-z.set(\freq,67.midicps);
-)
+
 (
 x.set(\freq,60.midicps);
 y.set(\freq,62.midicps);
@@ -73,8 +46,6 @@ x.free;
 y.free;
 z.free;
 )
-
-
 
 
 //////// b ////////
@@ -96,8 +67,10 @@ SynthDef("coolsynth",{
 	);
 	snd=Splay.ar(snd);
 	Out.ar(0,snd);
-}).play;
+}).add;
 )
+x = Synth("coolsynth");
+x.free;
 
 /* interlude on arrays vs lists
   - Array: fixed size collection (most common)
@@ -105,9 +78,9 @@ SynthDef("coolsynth",{
   - What are tuning systems but arrays and lists?*/
 m = Scale.minor.degrees; // Scale class returns the degrees of the minor scale
 
+Tuning.directory // which scales
 
 //////// c ////////
-// fancy multiexpansion
 // use Array.fill(<num>,{arg i; <code>})
 // to easily create an additive synth
 
@@ -125,8 +98,10 @@ SynthDef("coolsynth",{
 	);
 	snd=Splay.ar(snd);
 	Out.ar(0,snd);
-}).play;
+}).add;
 )
+x = Synth("coolsynth");
+x.free;
 // your turn!
 // take the synth in c and try changing things, including:
 // - try changing the oscillators (try VarSaw, SinOsc, Pulse, LFTri, Saw, ..)
@@ -134,16 +109,12 @@ SynthDef("coolsynth",{
 // - try changing the number of oscillators (instead of 3, do 1, 2, ..)
 
 
-
-
-
-
 //////// d ////////
 // filtering
 // LPF, RLPF, HPF, RHPF, BPF
 // MoogLadder, MoogVCF, MoogFF
 (
-{
+SynthDef("filtersynth",{
 	arg freq=220;
 	var snd;
 	var lpf, res;
@@ -154,14 +125,15 @@ SynthDef("coolsynth",{
 	res = Clip.kr(MouseY.kr(1,0.02),0.1,1); // add mouse modulation to resonance
 	snd = RLPF.ar(snd,lpf,res); // resonant low-pass filter
 	Out.ar(0,snd); // output the send
-}.play; // .play will play it
+}).add;
 )
-
+y = Synth("filtersynth");
+y.free;
 
 //////// e ////////
 // combining modulation + filter
 (
-{
+SynthDef("filtersynth", {
 	arg freq = 110;
 	var snd;
 	var lpf, res;
@@ -174,14 +146,16 @@ SynthDef("coolsynth",{
 	snd = RLPF.ar(snd,lpf, res); // resonant low-pass filter
 
 	Out.ar(0,snd); // output the send
-}.play; // .play will play it
+}).add;
 )
-
+y = Synth("filtersynth");
+y.free;
 
 
 //////// g ////////
-// more synths!
+///midisynth
 (
+SynthDef("midisynth",
 {
 	arg note=32;
 	var detune=0.1;
@@ -200,9 +174,10 @@ SynthDef("coolsynth",{
 	snd = Splay.ar(snd); // make a stereo field out of all the channels
 
 	Out.ar(0,snd); // output the send
-}.play; // .play will play it
+}).add
 )
-
+z = Synth("midisynth");
+z.free;
 
 /*
 <3 Rachel <3 Libraries <3
@@ -314,5 +289,3 @@ s.waitForBoot({
 	b.gui;
 })
 )
-
-// SMALL ASSIGNMENT 2 for next week

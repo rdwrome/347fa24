@@ -19,14 +19,17 @@ but I'll explain more in the 03.patterns week.
 - bit resolution/bit depth
 
 *rachel reminders*
-- Client (Interpreter/Language) boots when you open IDE
-- You do need to actively boot the Audio Server with <<Command|B>>
-- (see sample rate there!)
+- You do need to boot the Audio Server with **Command|B**
 - You see your I/O in the Post window after booting the Audio Server
-- If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup, *then* boot
 - [You might need to change them/select them with this code](https://doc.sccode.org/Reference/AudioDeviceSelection.html)
-- Evaluate a block with <<Command|Return>> when your cursor is *in* the block
-- Help! with <<Command|D>>
+- If you I/O audio rates don't match, the server won't boot and you'll need to make sure they match in your Audio MIDI setup
+- Evaluate a line with **Shift|Return**
+- Evaluate a block with **Command|Return**
+- Kill what is on the server with **Command|.**
+- ***Beware Zombie servers***
+- Everything's in mono by default
+- "Syntax Sugar": many ways to write out the same thing
+- Help! with **Command|D**
 
 */
 
@@ -87,28 +90,28 @@ x = {
 
 	son = num / denom;
 
-	Out.ar(0, Pan2.ar(son * 0.3)); // main mix or 'master' bus
+	Out.ar(0, Pan2.ar(son * 0.3)); // main mix or 'master' bus, first argument is just the index/location/proper name of the the bus itself
 
 }.freqscope; // frequency domain
 )
 
 // Frequency Modulation Synthesis
 (
-SynthDef(\fmSynth, { |carrierFreq=100, carrierLvl=0.5, modulatorRatio=5, modulatorIndex=1.5, outputAmp=0.2, sig, out=0|
+SynthDef(\fmSynth, { |carrierFreq=440, carrierLvl=0.5, modulatorRatio=5, modulatorIndex=1.5, outputAmp=0.2, sig|
 
 	// the simple FM core
 	sig = LFSaw.ar(carrierFreq, 1, 0.5, 0.5) * carrierLvl;
 	sig = sig + SinOsc.ar(carrierFreq * modulatorRatio) * modulatorIndex;
 	sig = cos( sig * 2pi) * outputAmp * 0.06;
-	Out.ar(out, sig);
-},1!5).add;
+	Out.ar(0, sig);
+}).add;
 )
 
 // At first start the synth:
 g = Synth(\fmSynth);
 
 // Play with the parameters:
-g.set(\carrierFreq, 800);
+g.set(\carrierFreq, 880);
 g.set(\carrierFreq, 50);
 g.set(\carrierFreq, 100, \modulatorRatio, 5, \modulatorIndex, 0.5);
 g.set(\carrierFreq, 40, \modulatorRatio, 7, \modulatorIndex, 1.5);

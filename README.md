@@ -8,9 +8,9 @@ LMSC-261 & MTEC-111 are prerequisites.
 - effects
 - patterns
 - playback
-- guis & controllerism (140character assignment due)
+- guis & controllerism 
 - [modelling](https://en.wikibooks.org/wiki/Designing_Sound_in_SuperCollider)
-- Code Analysis Presentations
+- Code Analysis
 - [mapping](https://archive.org/details/MappingAndVisualizationWithSuperCollider/page/n27/mode/2up)
 - Sharing is Caring
 

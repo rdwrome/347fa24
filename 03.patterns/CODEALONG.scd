@@ -1,5 +1,7 @@
 // adapted from: https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_01_Introduction.html
 
+DATES AND DEADLINES, RACHEL!
+
 /*
 Busses
 Generally your analog definition works: how we route audio to new places, but they're actually a little more complicated than that.
@@ -46,7 +48,6 @@ e.play
 e.reset
 e.mute; // keeps playing, but replaces notes with rests
 e.unmute;
-e.pause; // RACHEL WHAT IS THIS
 )
 
 /*Simple Pattern UGens to go with PBind from https://doc.sccode.org/Browse.html#Streams-Patterns-Events
@@ -62,10 +63,10 @@ p = Pbind(
 p.stop;
 /*
   - **Pseries**
-  - Arithmetic //RACHEL WHAT IS THISS
+  - Arithmetic
   - **Pgeom**
-  - Geometry*/ // RACHEL WHAT IS THIS
-(
+  - Geometry*/
+
 p = Pbind(
     \degree, Pseries(-7, 1, 15),
     \dur, Pgeom(0.5, 0.89140193218427, 15)
@@ -195,8 +196,6 @@ t.ratios.collect(_.round(0.001));
 
 Pbind(\scale, Scale.minor(t), \degree, Pxrand((0..15), inf), \dur, 0.25).play;
 
-
-// RACHEL RACHEL RACHEL YOU GOTTA ADD AppCLock, get with the times: https://doc.sccode.org/Classes/AppClock.html
 /*
 Routines & Tasks:
   - Pattern-less passing of messages to streams
@@ -288,6 +287,42 @@ t.stop;
 {16.do{arg i; Synth(\bleep, [\note,rrand(48,84) ,\amp, rrand(0.0,0.125)]); 2.wait} }.fork(TempoClock(2))
 )
 
-// RACHEL RACHEL RACHEL ADD DICTIONARIES HERE!!!
+// APP CLOCK for guis
+
+(
+var w, r;
+w = Window.new("trem", Rect(512, 256, 360, 130));
+w.front;
+r = Routine({ arg appClockTime;
+    ["AppClock has been playing for secs:",appClockTime].postln;
+    60.do({ arg i;
+        0.05.yield;
+        w.bounds = w.bounds.moveBy(10.rand2, 10.rand2);
+        w.alpha = cos(i*0.1pi)*0.5+0.5;
+    });
+    1.yield;
+    w.close;
+});
+AppClock.play(r);
+)
+
+// dictionaries https://doc.sccode.org/Classes/Dictionary.html
+a = (note: 2);
+b = (note: [3, 5]);
+Pseq([a, b]).play;
+
+(
+a = (
+    pattern: Pbind(\note, Pgeom(1, 1.1, { 20.rand }), \dur, 0.05),
+    embedInStream: { |event, inevent| event[\pattern].embedInStream(inevent) }
+);
+b = (note: [3, 5]);
+c = (freq: 402, dur: 0.3);
+Prand([a, b, c], inf).trace.play;
+)
+
+// change the events while playing
+c[\freq] = [900, 1002, 1102];
+c[\freq] = [200, 101, 1102];
 
 // 140 character Assignment!

@@ -56,17 +56,19 @@ e.unmute;
 
 (
 p = Pbind(
-    \degree, Pseq(#[0, 0, 4, 4, 5, 5, 4], 1),
-    \dur, Pseq(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)
+    \degree, Pseq(#[0, 0, 4, 4, 5, 5, 4], 3),
+    \dur, Pseq(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 3)
 ).play;
 )
 p.stop;
+p.play;
 /*
   - **Pseries**
   - Arithmetic
   - **Pgeom**
   - Geometry*/
 
+(
 p = Pbind(
     \degree, Pseries(-7, 1, 15),
     \dur, Pgeom(0.5, 0.89140193218427, 15)
@@ -109,7 +111,7 @@ p = Pbind(
 
 (
 p = Pbind(
-    \degree, Pwrand((0..7), [4, 1, 3, 1, 3, 2, 1].normalizeSum, inf),
+	\degree, Pwrand([0, 1, 2, 3, 4, 5, 6, 7], [4, 2, 2, 2, 2, 2, 4].normalizeSum, inf),
     \dur, 0.25
 ).play;
 )
@@ -182,11 +184,14 @@ Env.new([0, 1, 0.3, 0.8, 0], [2, 3, 1, 4],'sine').test.plot; //DIY shape
 (
 SynthDef("envSynth", {var env;
 	env = EnvGen.kr(Env.sine(1, 3), doneAction:2);
-	Out.ar(0, SinOsc.ar(200))}).add;
+	Out.ar(0, SinOsc.ar(200))})
+.add;
 )
 d= Synth("envSynth");
 
-/* Let's hook up Scale with PBind and TUNING systems! */
+/* Let's hook up Scale with PBind and TUNING systems!
+tuning systems: https://www.kylegann.com/tuning.html
+*/
 
 Tuning.directory
 
@@ -194,7 +199,7 @@ t = Tuning.harrison;
 t.semitones;
 t.ratios.collect(_.round(0.001));
 
-Pbind(\scale, Scale.minor(t), \degree, Pxrand((0..15), inf), \dur, 0.25).play;
+Pbind(\scale, Scale.minor(t), \degree, Pxrand((-15..3), inf), \dur, 0.25).play;
 
 /*
 Routines & Tasks:

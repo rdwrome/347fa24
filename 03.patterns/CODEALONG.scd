@@ -1,7 +1,5 @@
 // adapted from: https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_01_Introduction.html
 
-DATES AND DEADLINES, RACHEL!
-
 /*
 Busses
 Generally your analog definition works: how we route audio to new places, but they're actually a little more complicated than that.
@@ -199,7 +197,7 @@ t = Tuning.harrison;
 t.semitones;
 t.ratios.collect(_.round(0.001));
 
-Pbind(\scale, Scale.minor(t), \degree, Pxrand((-15..3), inf), \dur, 0.25).play;
+Pbind(\scale, Scale.minor(t), \degree, Pxrand((-15..3), inf), \dur, 0.25).play; // -15..3 notation explanation
 
 /*
 Routines & Tasks:
@@ -256,19 +254,28 @@ t.schedAbs(0, { arg ... args;
 r = Routine({
 		1.wait;
 		Synth(\bleep);
-		2.wait;
+		5.wait;
 		Synth(\bleep);
 	});
 )
 ///
 r.play;
+
 /// Simple Task
+
+(SynthDef(\singrain, { |freq = 440, amp = 0.2, sustain = 1, out|
+    var sig;
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.perc(0.1, sustain), doneAction: Done.freeSelf);
+    Out.ar(out, sig ! 2);    // sig ! 2 is the same as [sig, sig]
+}).add;);
+
+
 (
 t = Task({
     loop {
         [60, 62, 64, 65, 67, 69, 71, 72].do({ |midi|
             Synth(\singrain, [freq: midi.midicps, amp: 0.2, sustain: 0.1]);
-            0.125.wait;
+            1.wait;
         });
     }
 }).play;
@@ -289,7 +296,8 @@ t.stop;
 (3.do({ "threescrambledeggs".scramble.postln; }))
 
 (
-{16.do{arg i; Synth(\bleep, [\note,rrand(48,84) ,\amp, rrand(0.0,0.125)]); 2.wait} }.fork(TempoClock(2))
+{8.do{arg i; Synth(\bleep,
+	[\note,rrand(48,84) ,\amp, rrand(0.25,0.75)]); 2.wait} }.fork(TempoClock(5))
 )
 
 // APP CLOCK for guis
@@ -323,7 +331,7 @@ a = (
 );
 b = (note: [3, 5]);
 c = (freq: 402, dur: 0.3);
-Prand([a, b, c], inf).trace.play;
+Prand([a, b, c], inf).play;
 )
 
 // change the events while playing

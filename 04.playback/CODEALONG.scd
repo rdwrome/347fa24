@@ -1,132 +1,3 @@
-/*
-Routines & Tasks:
-  - Pattern-less passing of messages to streams
-  - Need to sync things with clocks?
-    - SystemClock: Most reliable
-    - TempoClock: Best for beats
-  - Need to start and stop full iterations with clocks?
-    - **Routine**
-  - Need to start, stop, and pause iterations without clocks?
-    - **Task**
-https://doc.sccode.org/Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks.html
-WAIT == YIELD
-*/
-(
-SynthDef(\bleep,{ arg out=0, note=60, amp=0.5, pan=0.0;
-	var freq, env;
-	freq = note.midicps;
-	env = EnvGen.ar(
-					Env([0,1,1,0],[0.01, 0.1, 0.2]),
-					levelScale:amp,
-					doneAction:2
-				);
-	Out.ar(out,
-		Pan2.ar(Blip.ar(freq) * env, pan)
-	)
-}).add;
-)
-/// SystemClock
-(
-
-SystemClock.sched(0.0,//start at 0.0 sec from now, i.e. immediately
-
-	{//a function which states what you wish to schedule
-
-		Synth(\bleep);
-
-		1		//repeat every second
-
-	}
-
-))
-/// TempoClock
-(
-var t;
-t = TempoClock(2); // 120 bpm = 2 beats per second
-t.schedAbs(0, { arg ... args;
-				args.postln;
-				Synth(\bleep);// make a bleep
-				1.0	// reschedule every beat
-}))
-/// Simple Routine
-(
-r = Routine({
-		1.wait;
-		Synth(\bleep);
-		2.wait;
-		Synth(\bleep);
-	});
-)
-///
-r.play;
-/// Simple Task
-(
-t = Task({
-    loop {
-        [60, 62, 64, 65, 67, 69, 71, 72].do({ |midi|
-            Synth(\singrain, [freq: midi.midicps, amp: 0.2, sustain: 0.1]);
-            0.125.wait;
-        });
-    }
-}).play;
-)
-
-// probably stops in the middle of the scale
-t.stop;
-
-t.play;    // should pick up with the next note
-
-t.stop;
-
-/***Forks**
-    - Routine shortcut. Wraps routine into .play and allows you to pass a clock into it.
-    - Because SC is totally OOP, have to use an object method to iterate
-    - **.do** is the most common*/
-
-(3.do({ "threescrambledeggs".scramble.postln; }))
-
-(
-{16.do{arg i; Synth(\bleep, [\note,rrand(48,84) ,\amp, rrand(0.0,0.125)]); 2.wait} }.fork(TempoClock(2))
-)
-
-// APP CLOCK for guis
-
-(
-var w, r;
-w = Window.new("trem", Rect(512, 256, 360, 130));
-w.front;
-r = Routine({ arg appClockTime;
-    ["AppClock has been playing for secs:",appClockTime].postln;
-    60.do({ arg i;
-        0.05.yield;
-        w.bounds = w.bounds.moveBy(10.rand2, 10.rand2);
-        w.alpha = cos(i*0.1pi)*0.5+0.5;
-    });
-    1.yield;
-    w.close;
-});
-AppClock.play(r);
-)
-
-// dictionaries https://doc.sccode.org/Classes/Dictionary.html
-a = (note: 2);
-b = (note: [3, 5]);
-Pseq([a, b]).play;
-
-(
-a = (
-    pattern: Pbind(\note, Pgeom(1, 1.1, { 20.rand }), \dur, 0.05),
-    embedInStream: { |event, inevent| event[\pattern].embedInStream(inevent) }
-);
-b = (note: [3, 5]);
-c = (freq: 402, dur: 0.3);
-Prand([a, b, c], inf).trace.play;
-)
-
-// change the events while playing
-c[\freq] = [900, 1002, 1102];
-c[\freq] = [200, 101, 1102];
-
 // adapted from https://github.com/schollz/workshops
 
 // don't forget to BOOT!
@@ -153,7 +24,7 @@ c[\freq] = [200, 101, 1102];
 	snd=PlayBuf.ar( // PlayBuf will play a sound in a buffer
 		numChannels:2, // we are dealing with stereo samples, so 2 channels
 		bufnum:~buffer, // the buffer
-		/* mess with // rate: -0.5, */
+		/* mess with rate: -0.2, */
 		loop:1,
 	);
 	Out.ar(0,snd); // send to Out UGen to channel 0 (default speakers)
@@ -236,12 +107,11 @@ SynthDef("musicbox", {
 }).add; // .add will add it to our server to be used anytime we want!
 )
 
-~buffer=Buffer.read(s,thisProcess.nowExecutingPath.dirname++"/whale.wav");
+~buffer=Buffer.read(s,thisProcess.nowExecutingPath.dirname++"/musicbox.wav");
 
 x=Synth("musicbox", [\bufnum, ~buffer]); // will start playing
 
 // TRY! try putting the modulation you created into this synthdef and playing
-
 
 
 //////// g ////////
@@ -277,14 +147,16 @@ SynthDef("musicbox", {
 }).add; // .add will add it to our server to be used anytime we want!
 )
 
-~buffer=Buffer.read(s,thisProcess.nowExecutingPath.dirname++"/whale.wav");
+~buffer=Buffer.read(s,thisProcess.nowExecutingPath.dirname++"/musicbox.wav");
 
 x=Synth("musicbox", [\bufnum, ~buffer]); // will start playing
 
 // TRY! change up the effects, the filters, the distortion, the modulation
 
-s.record(numChannels:8);
+s.record(numChannels:2);
 s.stopRecording;
+
+Duty
 
 ////////////////
 // __   __  _______  _______
@@ -322,13 +194,6 @@ s.waitForBoot({
 		var frames=BufFrames.kr(buf);
 		var duration=BufDur.kr(buf);
 
-
-
-		///////////////////////////////////////////////////////
-		// ----- START ADDING YOUR OWN MODULATION HERE ----- //
-		///////////////////////////////////////////////////////
-
-
 		// LFO for the start point
 		var lfoStart=SinOsc.kr(timescale/Rand(30,60),Rand(hi:2*pi)).range(1024,frames-10240);
 
@@ -346,13 +211,6 @@ s.waitForBoot({
 
 		// LFO for the panning
 		var lfoPan=SinOsc.kr(timescale/Rand(10,30),Rand(hi:2*pi)).range(-1,1);
-
-
-		///////////////////////////////////////////////////////
-		// ----- DONE ADDING YOUR OWN MODULATION HERE ------ //
-		///////////////////////////////////////////////////////
-
-
 
 		// calculate the final rate
 		var rate=Lag.kr(lfoRate*(2*lfoForward-1),1)*BufRateScale.kr(buf);
@@ -394,18 +252,7 @@ s.waitForBoot({
 		// do the panning
 		snd=Balance2.ar(snd[0],snd[1],lfoPan);
 
-		///////////////////////////////////////////////////////
-		// --------- START ADDING ANY EFFECTS HERE --------- //
-		///////////////////////////////////////////////////////
-
 		snd = CombC.ar(snd,0.5,Rand(0.05,0.5),2); // random delay
-		// snd = LPF.ar(snd,SinOsc.kr(0.1).exprange(20,2000)); // modulated filter
-		// snd = (snd * MouseX.kr(1,10)).tanh / 2; // mouse-controlled distortion
-		// ?????
-
-		///////////////////////////////////////////////////////
-		// -------=-- DONE ADDING ANY EFFECTS HERE --------- //
-		///////////////////////////////////////////////////////
 
 		// final output
 		Out.ar(0,snd*volume/5);
@@ -424,13 +271,6 @@ s.waitForBoot({
 		// collect the sound coming from the bus "0" on 2 channels (stereo)
 		var snd=In.ar(0,2);
 
-		///////////////////////////////////////////////////////
-		// ----- START ADDING YOUR GLOBAL EFFECTS HERE ----- //
-		///////////////////////////////////////////////////////
-
-		// add some nice tape compression
-		// snd = AnalogTape.ar(snd,0.9,0.8,0.9,2);
-
 		// add some delay
 		snd = CombC.ar(snd,0.5,delaytime:0.25,decaytime:1.1);
 
@@ -441,16 +281,6 @@ s.waitForBoot({
 			//Fverb.ar(snd[0],snd[1],50,decay:LFNoise2.kr(1/3).range(70,90))
 		]);
 
-		// // add some analog chewing (PortedPlugins needed)
-		// snd = SelectX.ar(LFNoise2.kr(1/3).range(0,1),[
-		// 	snd,
-		// 	AnalogChew.ar(snd);
-		// ]);
-
-		///////////////////////////////////////////////////////
-		// ----- DONE ADDING YOUR GLOBAL EFFECTS HERE ------ //
-		///////////////////////////////////////////////////////
-
 		// replace the output with the effected output
 		ReplaceOut.ar(0,snd*Lag.kr(amp));
 	}).send(s);
@@ -460,7 +290,7 @@ s.waitForBoot({
 
 	Routine {
 		// either load a file into the tape
-		u.loadTape(tape:1,filename:thisProcess.nowExecutingPath.dirname++"/wineglass.wav");
+		u.loadTape(tape:1,filename:thisProcess.nowExecutingPath.dirname++"/whale.wav");
 		// OR record another tape and play it
 		// u.recordTape(tape:1,seconds:3,recLevel:2); 3.5.wait;
 

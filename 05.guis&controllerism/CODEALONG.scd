@@ -1,5 +1,7 @@
 //140 Characters DUE/PLAYED IN CLASS
 
+//ANALYSIS IS COMING!
+
 /*
 adapted from:
 https://doc.sccode.org/Guides/GUI-Introduction.html

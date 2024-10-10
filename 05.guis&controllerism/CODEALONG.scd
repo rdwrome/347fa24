@@ -40,6 +40,8 @@ r = Slider(w, Rect(10, 160, 200, 20))
 
 // fo(u)nt of GOOEY
 
+Font.availableFonts;
+
 (
 w = Window.new("GUI Introduction",Rect(200,200,200,70)).front;
 a = [Font.defaultMonoFace, Font.defaultSansFace, Font.defaultSerifFace];
@@ -145,9 +147,9 @@ q = { on.free; off.free; };
 )
 ​
 // when done:
-q.value;
+q.free;
 
-// Car Engine controlled by MIDI IN
+// Car Engine controlled by MIDI IN CC from Designing Sound by Andy Farrell
 (
 e = SynthDef(\engine, {
 
@@ -303,7 +305,7 @@ They are HARD to install on M1s
 */
 
 
-//////// h ////////
+// adapted from https://github.com/schollz/workshops
 // before running this you must first save `Sun.sc` to the extensions directory.
 // open `Sun.sc` in SuperCollider.
 // now save it by doing `File -> Save As Extension...` and type `Sun.sc`.

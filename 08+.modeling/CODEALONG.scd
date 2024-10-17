@@ -1,5 +1,4 @@
-// sharing is caring introduction/assignment
-// ruby & primrose; cooper & eitan; sunshiyu & dooho; yujin & nathaniel; jacob & jose
+// analysis proposal due next week, analysis itself november 7
 
 //adapted from: https://en.wikibooks.org/wiki/Designing_Sound_in_SuperCollider
 //a plug for pd

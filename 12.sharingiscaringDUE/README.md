@@ -4,5 +4,4 @@
 - you must perform your partner's work.  
 - you will have time in class to collaborate with your partner (30min per class for 3 weeks), but the goal is for you to have such good written documentation by the end of the semester that any SuperCollisionist could play your work.
 
-# DUE FOR IN-CLASS PERFORMANCE ON APRIL 30
-### May 7 concert optional
+# DUE FOR IN-CLASS PERFORMANCE ON DECEMBER 5

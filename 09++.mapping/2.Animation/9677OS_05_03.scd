@@ -2,7 +2,7 @@
 var window, userView, windmill;
 (PathName(thisProcess.nowExecutingPath).pathOnly  ++ "9677OS_05_windmill_factory.scd").loadPaths; // first load the windmill factory
 windmill = ~windmillFactory.(225@225,150); // a new windmill
-window = Window("Traling Effect", 450@450).front;
+window = Window("Trailing Effect", 450@450).front;
 userView = UserView(window,450@450).background_(Color.white).animate_(true).frameRate_(60).clearOnRefresh_(false); // do not clear previous contents
 userView.drawFunc_({
 	var speed = 100;

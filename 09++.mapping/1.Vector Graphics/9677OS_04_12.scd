@@ -55,6 +55,6 @@
 		};
 	);
 
-	fractal; // explicitely return fractal
+	fractal; // explicitly return fractal
 };
 )

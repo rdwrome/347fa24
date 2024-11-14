@@ -6,11 +6,10 @@
 - you must perform your partner's work.  
 - you will have time in class to collaborate with your partner (30min per class for 3 weeks), but the goal is for you to have such good written documentation by the end of the semester that any SuperCollisionist could play your work.
 
-## Duos:
+## Duos/Trios:
 	- Esther & Diego
-	- Joe & Jason
+	- Joe & Jason & Noel
 	- David & Shri
-	- Elliot & Noel
 	- Bethanie & Neil
 
 # DUE FOR IN-CLASS PERFORMANCE ON DECEMBER 5
